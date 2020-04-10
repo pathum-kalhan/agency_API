@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     locality: {
       type: DataTypes.STRING,
     },
+    status: { type: DataTypes.BOOLEAN, defaultValue: true },
   }, {});
   customer.associate = function (models) {
     // associations can be defined here
