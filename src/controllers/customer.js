@@ -28,6 +28,32 @@ router.post('/', checkAuth, async (req, res) => {
   }
 });
 
+router.post('/report', checkAuth, async (req, res) => {
+  try {
+    const { status, from, to } = req.body;
+
+    let query = `SELECT * FROM customers WHERE
+    DATE(createdAt) BETWEEN DATE(:from) AND DATE(:to)`;
+
+    if (status !== 'All') {
+      query += `AND status=${status}`;
+    }
+
+    const data = await db.sequelize.query(query,
+      {
+        replacements: { from, to },
+        logging: true,
+        type: db.sequelize.QueryTypes.SELECT,
+
+      });
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 router.get('/', checkAuth, async (req, res) => {
   try {
     const data = await db[modelName].findAll();

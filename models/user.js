@@ -61,6 +61,8 @@ module.exports = (sequelize, DataTypes) => {
         return name;
       },
     },
+    isPermanent: { type: DataTypes.BOOLEAN, defaultValue: false },
+    joinedDate: { type: DataTypes.DATEONLY, defaultValue: null },
   }, {
     hooks: {
       beforeCreate(user) {
