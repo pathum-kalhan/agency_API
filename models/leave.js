@@ -25,10 +25,19 @@ module.exports = (sequelize, DataTypes) => {
     daysCount: { type: DataTypes.FLOAT },
     status: { type: DataTypes.BOOLEAN, defaultValue: true },
     notes: { type: DataTypes.TEXT },
+    typeOfLeave: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        const name = `${this.getDataValue('daysCount') === 1 ? 'FullDay' : 'Halfday'} `;
+        return name;
+      },
+    },
 
   }, {});
   leave.associate = function (models) {
-    // associations can be defined here
+    leave.belongsTo(models.user, {
+      foreignKey: 'userId',
+    });
   };
   return leave;
 };
