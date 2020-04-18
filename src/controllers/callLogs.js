@@ -23,7 +23,7 @@ router.post('/', checkAuth, async (req, res) => {
     res.sendStatus(200);
   } catch (error) {
     await transaction.rollback();
-    console.log(error);
+
     res.sendStatus(500);
   }
 });
@@ -48,8 +48,6 @@ router.put('/:id', checkAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log(req.body);
-    console.log(id);
 
     await db[modelName].update(req.body, {
       transaction,

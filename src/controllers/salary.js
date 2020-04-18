@@ -12,9 +12,6 @@ router.post('/', checkAuth, async (req, res) => {
   try {
     const user = await db.user.findOne({ where: { id: req.body.userId }, raw: true });
 
-    // console.log('user', user);
-    // console.log('body', req.body);
-
 
     // check is he has nopays
     const workingDays = Number(req.body.workingDays);
@@ -94,7 +91,7 @@ router.post('/', checkAuth, async (req, res) => {
     return res.sendStatus(200);
   } catch (error) {
     await transaction.rollback();
-    console.error(error);
+
     return res.sendStatus(500);
   }
 });

@@ -49,7 +49,6 @@ router.post('/report', checkAuth, async (req, res) => {
 
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -65,7 +64,7 @@ router.get('/', checkAuth, async (req, res) => {
 
 router.put('/status', checkAuth, async (req, res) => {
   const transaction = await db.sequelize.transaction();
-  console.log('come to here **********');
+
   try {
     const { id, status } = req.body;
 
@@ -90,7 +89,7 @@ router.put('/status', checkAuth, async (req, res) => {
     res.sendStatus(200);
   } catch (error) {
     await transaction.rollback();
-    console.log(error);
+
     res.sendStatus(500);
   }
 });

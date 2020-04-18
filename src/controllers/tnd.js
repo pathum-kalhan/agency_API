@@ -110,7 +110,6 @@ router.put('/:id/:tndId', checkAuth, async (req, res) => {
 
     res.sendStatus(200);
   } catch (error) {
-    console.log(error);
     await transaction.rollback();
 
     res.sendStatus(500);
