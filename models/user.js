@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     isPermanent: { type: DataTypes.BOOLEAN, defaultValue: false },
     joinedDate: { type: DataTypes.DATEONLY, defaultValue: null },
+    basicSal: { type: DataTypes.FLOAT },
   }, {
     hooks: {
       beforeCreate(user) {
