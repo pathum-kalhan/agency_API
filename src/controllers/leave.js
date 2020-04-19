@@ -41,7 +41,7 @@ router.post('/', checkAuth, async (req, res) => {
          * IF USER IS NOT A PERMANENT EMPLOYEE HE HAS ONLY
          * CASUAL 1/2 FOR THE MONTH
          */
-      if ((user.isPermanent === 0) && (leaveType !== 'nopay')) {
+      if ((user.isPermanent === 0) && (leaveType !== 'Nopay')) {
         const from = new Date(d);
         const to = new Date(d);
 
@@ -153,9 +153,12 @@ router.post('/', checkAuth, async (req, res) => {
       }
 
       if (leaveType === 'Nopay') {
+        console.log('NOPAY')
         data = await db[modelName].create(req.body);
       }
     }
+
+    console.log(data)
 
 
     await db.audit.create({
@@ -170,7 +173,7 @@ router.post('/', checkAuth, async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     await transaction.rollback();
-
+    console.log(error)
     res.sendStatus(500);
   }
 });

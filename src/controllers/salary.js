@@ -64,11 +64,11 @@ router.post('/', checkAuth, async (req, res) => {
     }
 
     const basicSalary = user.basicSal;
-    let salary = Number(basicSalary) - Number(basicSalary * (3 / 100));
+    let salary = Number(basicSalary) - Number(basicSalary * (8 / 100));
 
     if (nopayLeaves) {
       salary = (basicSalary / workingDays) * (workingDays - nopayLeaves);
-      salary -= (basicSalary * (3 / 100));
+      salary -= (basicSalary * (8 / 100));
     }
 
     if (allowance) {
