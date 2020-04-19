@@ -115,4 +115,26 @@ router.get('/:id', checkAuth, async (req, res) => {
   }
 });
 
+router.post('/report', checkAuth, async (req, res) => {
+  try {
+    const {
+      from, to, orderBy,
+    } = req.body;
+
+    const query = `SELECT * FROM expenses WHERE
+    DATE(createdAt) BETWEEN DATE(:from) AND DATE(:to) ORDER BY ${orderBy};`;
+
+    const data = await db.sequelize.query(query,
+      {
+        replacements: { from, to },
+        logging: true,
+        type: db.sequelize.QueryTypes.SELECT,
+      });
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

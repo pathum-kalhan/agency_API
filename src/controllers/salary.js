@@ -218,4 +218,27 @@ router.delete('/:id', checkAuth, async (req, res) => {
   }
 });
 
+router.post('/report', async (req, res) => {
+  try {
+    const {
+      month, orderBy,
+    } = req.body;
+    const query = `SELECT salaries.*,CONCAT(users.title,' ',users.firstName,
+    ' ',users.lastName) AS fullName FROM agency.salaries
+    INNER JOIN users ON salaries.userId = users.id WHERE
+    CAST(salaries.createdAt AS CHAR) LIKE '${month}%' ORDER BY ${orderBy}`;
+
+    const data = await db.sequelize.query(query,
+      {
+        replacements: { month, orderBy },
+        type: db.sequelize.QueryTypes.SELECT,
+      });
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

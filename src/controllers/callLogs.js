@@ -121,4 +121,30 @@ router.get('/:id', checkAuth, async (req, res) => {
   }
 });
 
+router.post('/report', async (req, res) => {
+  try {
+    const {
+      orderBy, ids, from, to,
+    } = req.body;
+    const query = `SELECT calllogs.*,CONCAT(users.title,' ',users.firstName,' ',
+    users.lastName) AS fullName FROM calllogs
+    INNER JOIN users ON calllogs.userId = users.id
+    WHERE DATE(calllogs.createdAt) BETWEEN DATE(:from) AND DATE(:to)
+    AND calllogs.userId IN (:ids) ORDER BY ${orderBy}`;
+
+    const data = await db.sequelize.query(query,
+      {
+        replacements: { ids, from, to },
+
+        type: db.sequelize.QueryTypes.SELECT,
+      });
+
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

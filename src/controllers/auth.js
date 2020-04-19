@@ -182,13 +182,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', checkAuth, async (req, res) => {
+
+router.get('/all', async (req, res) => {
   try {
-    const data = await db.user.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const data = await db.user.findAll();
 
     res.status(200).json(data);
   } catch (error) {
@@ -200,6 +197,40 @@ router.get('/me', checkAuth, async (req, res) => {
   try {
     const data = await db.User.findById(req.user.id);
 
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
+router.post('/report', async (req, res) => {
+  try {
+    const { orderBy, roles, status } = req.body;
+    const query = `SELECT * FROM users WHERE role IN (:roles) ${status !== 'All' ? `AND ${status}` : ''}
+    ORDER BY ${orderBy};`;
+
+    const data = await db.sequelize.query(query,
+      {
+        replacements: { roles },
+
+        type: db.sequelize.QueryTypes.SELECT,
+      });
+
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
+router.get('/:id', checkAuth, async (req, res) => {
+  try {
+    const data = await db.user.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
 
     res.status(200).json(data);
   } catch (error) {
